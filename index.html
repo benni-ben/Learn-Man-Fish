@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <link rel="apple-touch-icon-precomposed" href="images/favicon/apple-touch-icon-152x152.png">
+        <meta name="msapplication-TileColor" content="#FFFFFF">
+        <meta name="msapplication-TileImage" content="images/favicon/mstile-144x144.png">
+        <link rel="icon" href="images/favicon/favicon-32x32.png" sizes="32x32">
+        <title>Materialize</title>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="materialize/css/materialize.css" rel="stylesheet">
+        <link href="style.css" rel="stylesheet">
+        <link rel="stylesheet" href="materialize/css/materialize.min.css">
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div style="text-align: center;">
+            <div data-empty-placeholder style="width: 30%; height: 80%; display: block; position: static; margin: auto;">
+                <a class="blue btn-large flow-text waves-effect waves-purple" style="width: 100%; margin: auto; position: static; text-align: center; font-size: 2em; margin-bottom: 10%; margin-top: 10%;">NEW QUOTE</a>
+            </div>
+        </div>
+    <div class="cont">
+    <h2 class="quotebox" style="font-style:italic; font-size: 5rem; position: absolute; width: 100%; text-align: center; color: rgb(0, 0, 0); text-shadow: 1px 1px 10px #00000092;">Quote</h2>
+    </div>
+    <script>
+        function getQuote() {
+            //get the JSON file "quotesdb.json"
+            fetch('quotesdb.json')
+                .then(response => response.json())
+                .then(data => {
+                    //update the quotebox with a random quote
+                    const randomQuote = data[Math.floor(Math.random() * data.length)];
+                    document.querySelector('.quotebox').textContent = randomQuote;
+                })
+                .catch(error => console.error('Error fetching quotes:', error));
+        }
+    </script>
+        <script>
+            $(document).ready(function() { M.AutoInit() });
+        </script>
+        <script src="materialize/js/materialize.min.js"></script>
+    </body>
+</html>
