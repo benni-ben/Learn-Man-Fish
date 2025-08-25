@@ -27,7 +27,8 @@
     </div>
     <script>
         let quoteBox = document.getElementById('quotebox');
-        quoteBox.addEventListener("click", getQuote);
+        let quoteButton = document.getElementsByClassName('btn-large')[0];
+        quoteButton.addEventListener("click", getQuote);
         function getQuote() {
             //get the JSON file "quotesdb.json"
             fetch('quotesdb.json')
