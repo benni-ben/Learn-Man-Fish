@@ -26,7 +26,7 @@
     <h2 class="quotebox" style="font-style:italic; font-size: 5rem; position: absolute; width: 100%; text-align: center; color: rgb(0, 0, 0); text-shadow: 1px 1px 10px #00000092;">Quote</h2>
     </div>
     <script>
-        let quoteBox = document.querySelector('.quotebox');
+        let quoteBox = document.getElementById('quotebox');
         quoteBox.addEventListener("click", getQuote);
         function getQuote() {
             //get the JSON file "quotesdb.json"
@@ -35,7 +35,7 @@
                 .then(data => {
                     //update the quotebox with a random quote
                     const randomQuote = data[Math.floor(Math.random() * data.length)];
-                    document.querySelector('.quotebox').textContent = randomQuote;
+                    quoteBox.textContent = randomQuote;
                 })
                 .catch(error => console.error('Error fetching quotes:', error));
         }
