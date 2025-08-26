@@ -12,9 +12,7 @@
         <title>Garbled Quote Generator</title>
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link href="materialize/css/materialize.css" rel="stylesheet">
-        <link href="style.css" rel="stylesheet">
         <link rel="stylesheet" href="materialize/css/materialize.css">
-        <link rel="stylesheet" href="style.css">
     </head>
     <body>
         <div style="text-align: center;">
@@ -23,7 +21,7 @@
             </div>
         </div>
     <div class="cont">
-    <h2 id="quotebox" style="font-style:italic; font-size: 5rem; position: static; width: 100%; text-align: center; color: rgb(0, 0, 0); text-shadow: 1px 1px 10px #00000092;">Quote</h2>
+    <h2 id="quotebox" style="font-style:italic; font-size: 5rem; position: static; width: 100%; padding: 4%; margin: auto; text-align: center; color: rgb(0, 0, 0); text-shadow: 1px 1px 10px #00000092;">Quote</h2>
     <h3 id="authorBox" style="font-style:bold; font-size: 2.4rem; position: static; width: 100%; text-align: center; color: rgb(50, 50, 50); text-shadow: 1px 1px 10px #16161692;margin-top: 30px;">Quote</h3>
     </div>
     <script>
@@ -53,6 +51,12 @@
             console.log(randomQuote);
             }
         }
+        document.addEventListener("DOMContentLoaded", () => {
+            getQuote().then(() => {
+                quoteBox.textContent = garbleQuote(randomQuote);
+                randomAuthor();
+            });
+        });
         function garbleQuote(quote) {
             if (!quote || typeof quote !== 'string') return "No quote available. Please click 'NEW QUOTE' to fetch a quote.";
             quote = quote.trim();
