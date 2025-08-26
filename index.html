@@ -28,7 +28,6 @@
     <script>
         let quoteBox = document.getElementById('quotebox');
         let quoteButton = document.getElementById('button');
-        quoteButton.addEventListener("click", getQuote);
         function randomNumber(min, max) {
             return Math.floor(Math.random() * (max - min + 1)) + min;
         }
@@ -43,14 +42,80 @@
             const index = randomNumber(0, quotes.length - 1);
 
             // store fetched quote in a global variable and log it
-            window.randomQuote = quotes[index].text ?? String(quotes[index]);
-            console.log('randomQuote:', window.randomQuote);
+            randomQuote = quotes[index].text ?? String(quotes[index]);
+            console.log('randomQuote:', randomQuote);
             } catch (err) {
             console.error(err);
             console.log("Could not load quote.");
+            garbleQuote(getQuote)
             }
         }
+        function garbleQuote(quote) {
+            if (!quote) return "No quote available. Please click 'NEW QUOTE' to fetch a quote.";
+            quote = quote.trim();
+            const re = /([^\w'’\-]*)([\w'’\-]+)([^\w'’\-]*)/g;
+            let match;
+            const tokens = [];
+            while ((match = re.exec(quote)) !== null) {
+                tokens.push({
+                    leading: match[1] || '',
+                    core: match[2],
+                    trailing: match[3] || ''
+                });
+            }
+            if (!tokens.length) return quote;
 
+            // shuffle tokens so the words stay intact
+            for (let i = tokens.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [tokens[i], tokens[j]] = [tokens[j], tokens[i]];
+            }
+
+            // strip terminal sentence punctuation from all trailing parts
+            tokens.forEach(t => {
+                t.trailing = t.trailing.replace(/[.?!]+$/g, '');
+            });
+
+            // ensure last token ends with a single period, keeping any closing punctuation (quotes, parens) after it
+            const last = tokens[tokens.length - 1];
+            const closingMatch = last.trailing.match(/([)\]'"”’]+)$/);
+            let closing = '';
+            if (closingMatch) {
+                closing = closingMatch[1];
+                last.trailing = last.trailing.slice(0, last.trailing.length - closing.length);
+            }
+            last.trailing = last.trailing + '.' + closing;
+
+            // keep acronyms/all-caps, keep 'I', lower-case others
+            tokens.forEach(t => {
+                const core = t.core;
+                if (/^[A-Z0-9]{2,}$/.test(core)) {
+                    // likely an acronym, keep as is
+                    t.core = core;
+                } else if (core.toLowerCase() === 'i') {
+                    t.core = 'I';
+                } else {
+                    t.core = core.toLowerCase();
+                }
+            });
+
+            // capitalize first word of the sentence (after any leading punctuation)
+            if (tokens.length) {
+                const first = tokens[0];
+                first.core = first.core.charAt(0).toUpperCase() + first.core.slice(1);
+            }
+
+            // join tokens with single spaces and remove any space before punctuation
+            let result = tokens.map(t => t.leading + t.core + t.trailing).join(' ');
+            result = result.replace(/\s+([,;:.!?])/g, '$1');
+
+            return result;
+        }
+        quoteButton.addEventListener("click", () => {
+            getQuote().then(() => {
+                quoteBox.textContent = garbleQuote(randomQuote);
+            });
+        });
         </script>
         <script src="materialize/js/materialize.min.js"></script>
         </body>
