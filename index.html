@@ -221,6 +221,7 @@
                         job = entry.job ?? entry.title ?? 'Professional';
                     }
                 }
+                quoteAuthor.style.textShadow = '1px 1px 10px #' + Math.floor(Math.random()*2000000).toString(16);
 
                 quoteAuthor.textContent = `${author}, a ${job}`;
             } catch (error) {
