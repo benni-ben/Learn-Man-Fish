@@ -188,21 +188,46 @@
 
             return result;
         }
-        function randomAuthor() {
-            const res = fetch('quotesdb.json').then(response => {
-                if (!response.ok) throw new Error('The network response was not ok.');
-                return response.json();
-            });
-            res.then(data => {
-                const quotes = Array.isArray(data) ? data : (Array.isArray(data.quotes) ? data.quotes : []);
-                if (!quotes.length) throw new Error('No author field found inside of the JSON! Make sure that the author field is present.');
-                const index = randomNumber(0, quotes.length - 1);
-                const randomAuthor = quotes[index].author ?? "Unknown";
-                quoteAuthor.textContent = `${randomAuthor}`;
-            });
+        async function randomAuthor() {
+            try {
+                const [quotesRes, jobsRes] = await Promise.all([
+                    fetch('quotesdb.json'),
+                    fetch('jobsdb.json')
+                ]);
+                if (!quotesRes.ok) throw new Error('Failed to fetch quotes database. Be sure that the quotesdb.json file is present and accessible.');
+                if (!jobsRes.ok) throw new Error('Failed to fetch jobs database. Be sure that the jobsdb.json file is present and accessible.');
 
+                const qdata = await quotesRes.json();
+                const jdata = await jobsRes.json();
+
+                const quotes = Array.isArray(qdata) ? qdata : (Array.isArray(qdata.quotes) ? qdata.quotes : []);
+                const jobs = Array.isArray(jdata) ? jdata : (Array.isArray(jdata.jobs) ? jdata.jobs : []);
+
+                // pick random author
+                let author = 'Unknown';
+                if (quotes.length) {
+                    const qi = randomNumber(0, quotes.length - 1);
+                    author = quotes[qi].author ?? 'Unknown';
+                }
+
+                // pick random job
+                let job = 'Professional';
+                if (jobs.length) {
+                    const ji = randomNumber(0, jobs.length - 1);
+                    const entry = jobs[ji];
+                    if (typeof entry === 'string') {
+                        job = entry;
+                    } else {
+                        job = entry.job ?? entry.title ?? 'Professional';
+                    }
+                }
+
+                quoteAuthor.textContent = `${author}, a ${job}`;
+            } catch (error) {
+                console.error('Error fetching author/job:', error);
+                quoteAuthor.textContent = 'Quote';
+            }
         }
-
         quoteButton.addEventListener("click", () => {
             getQuote().then(() => {
                 quoteBox.textContent = garbleQuote(randomQuote);
