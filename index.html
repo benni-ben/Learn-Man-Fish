@@ -29,7 +29,7 @@
         let quoteBox = document.getElementById('quotebox');
         let quoteButton = document.getElementById('button');
         function randomNumber(min, max) {
-            return Math.floor(Math.random() * (max - min + 1)) + min;
+            return Math.round(Math.floor(Math.random() * (max - min + 1)) + min);
         }
         async function getQuote() {
             try {
@@ -108,7 +108,12 @@
             // join tokens with single spaces and remove any space before punctuation
             let result = tokens.map(t => t.leading + t.core + t.trailing).join(' ');
             result = result.replace(/\s+([,;:.!?])/g, '$1');
-
+            // cutoff a random number of words from 1 to 4
+            const words = result.split(' ');
+            const cutoff = randomNumber(1, 4);
+            result = words.slice(0, cutoff).join(' ');
+            // delete any 'the' at the end of the result
+            result = result.replace(/\s+the$/i, '');
             return result;
         }
         quoteButton.addEventListener("click", () => {
