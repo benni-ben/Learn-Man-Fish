@@ -24,11 +24,12 @@
         </div>
     <div class="cont">
     <h2 id="quotebox" style="font-style:italic; font-size: 5rem; position: absolute; width: 100%; text-align: center; color: rgb(0, 0, 0); text-shadow: 1px 1px 10px #00000092;">Quote</h2>
-    <h2 id="authorBox" style="font-style:italic; font-size: 2rem; position: absolute; width: 100%; text-align: center; color: rgb(50, 50, 50); text-shadow: 1px 1px 10px #16161692;">Quote</h2>
+    <h2 id="authorBox" style="font-style:italic; font-size: 2rem; position: static; width: 100%; text-align: center; color: rgb(50, 50, 50); text-shadow: 1px 1px 10px #16161692;margin-top: 20px;">Quote</h2>
     </div>
     <script>
     let quoteBox = document.getElementById('quotebox');
     let quoteButton = document.getElementById('button');
+    let quoteAuthor = document.getElementById('authorBox');
     let randomQuote = '';
     function randomNumber(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -188,12 +189,24 @@
             return result;
         }
         function randomAuthor() {
-            
+            const res = fetch('quotesdb.json').then(response => {
+                if (!response.ok) throw new Error('The network response was not ok.');
+                return response.json();
+            });
+            res.then(data => {
+                const quotes = Array.isArray(data) ? data : (Array.isArray(data.quotes) ? data.quotes : []);
+                if (!quotes.length) throw new Error('No author field found inside of the JSON! Make sure that the author field is present.');
+                const index = randomNumber(0, quotes.length - 1);
+                const randomAuthor = quotes[index].author ?? "Unknown";
+                quoteAuthor.textContent = `${randomAuthor}`;
+            });
+
         }
 
         quoteButton.addEventListener("click", () => {
             getQuote().then(() => {
                 quoteBox.textContent = garbleQuote(randomQuote);
+                randomAuthor();
             });
         });
         </script>
