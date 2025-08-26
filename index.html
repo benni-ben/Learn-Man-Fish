@@ -5,19 +5,38 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="A quote generator that creates garbled quotes from existing quotes.">
         <meta name="author" content="ben">
-        <link rel="apple-touch-icon-precomposed" href="images/favicon/apple-touch-icon-152x152.png">
         <meta name="msapplication-TileColor" content="#FFFFFF">
-        <meta name="msapplication-TileImage" content="images/favicon/mstile-144x144.png">
-        <link rel="icon" href="images/favicon/favicon-32x32.png" sizes="32x32">
         <title>Garbled Quote Generator</title>
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link href="materialize/css/materialize.css" rel="stylesheet">
         <link rel="stylesheet" href="materialize/css/materialize.css">
     </head>
+    <style>/* fallback */
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url("materialize/FontFace.woff2") format('woff2');
+}
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}</style>
     <body>
         <div style="text-align: center;">
-            <div data-empty-placeholder style="width: 30%; height: 80%; display: block; position: static; margin: auto;">
-                <a id= "button" class="blue btn-large flow-text waves-effect waves-purple" style="width: 100%; margin: auto; position: static; text-align: center; font-size: 2em; margin-bottom: 10%; margin-top: 10%;">NEW QUOTE</a>
+            <div style="margin-top: 30px; margin-bottom: 30px;">
+                <a class="waves-effect waves-light btn" id="button">new quote</a>
             </div>
         </div>
     <div class="cont">
