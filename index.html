@@ -3,13 +3,13 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="">
-        <meta name="author" content="">
+        <meta name="description" content="A quote generator that creates garbled quotes from existing quotes.">
+        <meta name="author" content="ben">
         <link rel="apple-touch-icon-precomposed" href="images/favicon/apple-touch-icon-152x152.png">
         <meta name="msapplication-TileColor" content="#FFFFFF">
         <meta name="msapplication-TileImage" content="images/favicon/mstile-144x144.png">
         <link rel="icon" href="images/favicon/favicon-32x32.png" sizes="32x32">
-        <title>Materialize</title>
+        <title>Garbled Quote Generator</title>
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link href="materialize/css/materialize.css" rel="stylesheet">
         <link href="style.css" rel="stylesheet">
@@ -29,18 +29,29 @@
         let quoteBox = document.getElementById('quotebox');
         let quoteButton = document.getElementById('button');
         quoteButton.addEventListener("click", getQuote);
-        function getQuote() {
-            //get the JSON file "quotesdb.json"
-            fetch('quotesdb.json')
-                .then(response => response.json())
-                .then(data => {
-                    //update the quotebox with a random quote
-                    const randomQuote = data[Math.floor(Math.random() * data.length)];
-                    quoteBox.textContent = randomQuote;
-                })
-                .catch(error => console.error('Error fetching quotes:', error));
+        function randomNumber(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
         }
-    </script>
+        async function getQuote() {
+            try {
+            const res = await fetch('quotesdb.json');
+            if (!res.ok) throw new Error('The network response was not ok.');
+            const data = await res.json();
+
+            const quotes = Array.isArray(data) ? data : (Array.isArray(data.quotes) ? data.quotes : []);
+            if (!quotes.length) throw new Error('JSON does not contain any quotes. Please add quotes before using.');
+            const index = randomNumber(0, quotes.length - 1);
+
+            // store fetched quote in a global variable and log it
+            window.randomQuote = quotes[index].text ?? String(quotes[index]);
+            console.log('randomQuote:', window.randomQuote);
+            } catch (err) {
+            console.error(err);
+            console.log("Could not load quote.");
+            }
+        }
+
+        </script>
         <script src="materialize/js/materialize.min.js"></script>
-    </body>
-</html>
+        </body>
+    </html>
