@@ -48,9 +48,15 @@
     let quoteButton = document.getElementById('button');
     let quoteAuthor = document.getElementById('authorBox');
     let randomQuote = '';
-    function randomNumber(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
+        function randomNumber(min, max) {
+            if (min == max) {
+                return min;
+            }
+            else {
+                return Math.floor(Math.random() * (max - min + 1)) + min;
+            }
+
+        }
         async function getQuote() {
             try {
             const res = await fetch('quotesdb.json');
