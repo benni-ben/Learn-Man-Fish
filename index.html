@@ -70,7 +70,6 @@
                 const j = Math.floor(Math.random() * (i + 1));
                 [tokens[i], tokens[j]] = [tokens[j], tokens[i]];
             }
-
             // strip terminal sentence punctuation from all trailing parts
             tokens.forEach(t => {
                 t.trailing = t.trailing.replace(/[.?!]+$/g, '');
@@ -104,16 +103,76 @@
                 const first = tokens[0];
                 first.core = first.core.charAt(0).toUpperCase() + first.core.slice(1);
             }
-
             // join tokens with single spaces and remove any space before punctuation
-            let result = tokens.map(t => t.leading + t.core + t.trailing).join(' ');
-            result = result.replace(/\s+([,;:.!?])/g, '$1');
-            // cutoff a random number of words from 1 to 4
-            const words = result.split(' ');
-            const cutoff = randomNumber(1, 4);
-            result = words.slice(0, cutoff).join(' ');
+                let result = tokens.map(t => t.leading + t.core + t.trailing).join(' ');
+                result = result.replace(/\s+([,;:.!?])/g, '$1');
             // delete any 'the' at the end of the result
-            result = result.replace(/\s+the$/i, '');
+                 result = result.replace(/\s+the$/i, '');
+            return result;
+            // we clear the duplicate words, except for the words in the filterMask
+            const filterMask = [
+                'I',
+                'you',
+                'he',
+                'she',
+                'it',
+                'we',
+                'they',
+                'me',
+                'him',
+                'her',
+                'us',
+                'them',
+                'my',
+                'your',
+                'his',
+                'her',
+                'its',
+                'our',
+                'their',
+                'mine',
+                'yours',
+                'hers',
+                'ours',
+                'theirs'
+            ];
+            const seen = new Set();
+            const filtered = [];
+            result.split(' ').forEach(word => {
+                if (!seen.has(word) || filterMask.includes(word)) {
+                    filtered.push(word);
+                    seen.add(word);
+                }
+            });
+            result = filtered.join(' ');
+
+            // no leading/trailing whitespace
+            result = result.trim();
+            // make sure that any words from the filterMask2 are not at the end of the result, before the period.
+            const filterMask2 = [
+                'a',
+                'an',
+                'the',
+                'and',
+                'but',
+                'or',
+                'for',
+                'nor',
+                'so',
+                'yet',
+                'at',
+                'by',
+                'in',
+                'of',
+                'on',
+                'to',
+                'up',
+                'as'
+            ];
+            const lastWord = result.split(' ').pop();
+            if (filterMask2.includes(lastWord)) {
+                result = result.slice(0, result.lastIndexOf(' '));
+            }
             return result;
         }
         quoteButton.addEventListener("click", () => {
