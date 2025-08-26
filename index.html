@@ -24,6 +24,7 @@
         </div>
     <div class="cont">
     <h2 id="quotebox" style="font-style:italic; font-size: 5rem; position: absolute; width: 100%; text-align: center; color: rgb(0, 0, 0); text-shadow: 1px 1px 10px #00000092;">Quote</h2>
+    <h2 id="authorBox" style="font-style:italic; font-size: 2rem; position: absolute; width: 100%; text-align: center; color: rgb(50, 50, 50); text-shadow: 1px 1px 10px #16161692;">Quote</h2>
     </div>
     <script>
     let quoteBox = document.getElementById('quotebox');
@@ -180,11 +181,13 @@
             }
             // remove all punctuation
             result = result.replaceAll(/[.?!]+/g, '');
+            result = result.replaceAll(/[,;:]+/g, '');
             result = result.endsWith('.') ? result : result + '.';
             // if there is anything from the deleteArray before the end period, delete it
 
             return result;
         }
+
         quoteButton.addEventListener("click", () => {
             getQuote().then(() => {
                 quoteBox.textContent = garbleQuote(randomQuote);
