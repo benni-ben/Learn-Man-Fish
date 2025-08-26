@@ -26,11 +26,12 @@
     <h2 id="quotebox" style="font-style:italic; font-size: 5rem; position: absolute; width: 100%; text-align: center; color: rgb(0, 0, 0); text-shadow: 1px 1px 10px #00000092;">Quote</h2>
     </div>
     <script>
-        let quoteBox = document.getElementById('quotebox');
-        let quoteButton = document.getElementById('button');
-        function randomNumber(min, max) {
-            return Math.round(Math.floor(Math.random() * (max - min + 1)) + min);
-        }
+    let quoteBox = document.getElementById('quotebox');
+    let quoteButton = document.getElementById('button');
+    let randomQuote = '';
+    function randomNumber(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
         async function getQuote() {
             try {
             const res = await fetch('quotesdb.json');
@@ -43,15 +44,15 @@
 
             // store fetched quote in a global variable and log it
             randomQuote = quotes[index].text ?? String(quotes[index]);
-            console.log('randomQuote:', randomQuote);
             } catch (err) {
             console.error(err);
             console.log("Could not load quote.");
-            garbleQuote(getQuote)
+            randomQuote = '';
+            console.log(randomQuote);
             }
         }
         function garbleQuote(quote) {
-            if (!quote) return "No quote available. Please click 'NEW QUOTE' to fetch a quote.";
+            if (!quote || typeof quote !== 'string') return "No quote available. Please click 'NEW QUOTE' to fetch a quote.";
             quote = quote.trim();
             const re = /([^\w'’\-]*)([\w'’\-]+)([^\w'’\-]*)/g;
             let match;
@@ -75,7 +76,8 @@
                 t.trailing = t.trailing.replace(/[.?!]+$/g, '');
             });
 
-            // ensure last token ends with a single period, keeping any closing punctuation (quotes, parens) after it
+            // ensure last token ends with a single period, and there should be no other punctuation in the quote.
+            
             const last = tokens[tokens.length - 1];
             const closingMatch = last.trailing.match(/([)\]'"”’]+)$/);
             let closing = '';
@@ -103,12 +105,13 @@
                 const first = tokens[0];
                 first.core = first.core.charAt(0).toUpperCase() + first.core.slice(1);
             }
+
             // join tokens with single spaces and remove any space before punctuation
-                let result = tokens.map(t => t.leading + t.core + t.trailing).join(' ');
-                result = result.replace(/\s+([,;:.!?])/g, '$1');
+            let result = tokens.map(t => t.leading + t.core + t.trailing).join(' ');
+            result = result.replace(/\s+([,;:.!?])/g, '$1');
             // delete any 'the' at the end of the result
-                 result = result.replace(/\s+the$/i, '');
-            return result;
+            result = result.replace(/\s+the$/i, '');
+
             // we clear the duplicate words, except for the words in the filterMask
             const filterMask = [
                 'I',
@@ -148,7 +151,7 @@
 
             // no leading/trailing whitespace
             result = result.trim();
-            // make sure that any words from the filterMask2 are not at the end of the result, before the period.
+            // make sure that any words from the filterMask2 are not at the end of the result
             const filterMask2 = [
                 'a',
                 'an',
@@ -170,10 +173,16 @@
                 'as',
                 'your'
             ];
-            const lastWord = result.split(' ').pop();
+            const lastWordRaw = result.split(' ').pop() || '';
+            const lastWord = lastWordRaw.replace(/[.?!]+$/,'').toLowerCase();
             if (filterMask2.includes(lastWord)) {
                 result = result.slice(0, result.lastIndexOf(' '));
             }
+            // remove all punctuation
+            result = result.replaceAll(/[.?!]+/g, '');
+            result = result.endsWith('.') ? result : result + '.';
+            // if there is anything from the deleteArray before the end period, delete it
+
             return result;
         }
         quoteButton.addEventListener("click", () => {
