@@ -24,7 +24,7 @@
         </div>
     <div class="cont">
     <h2 id="quotebox" style="font-style:italic; font-size: 5rem; position: static; width: 100%; text-align: center; color: rgb(0, 0, 0); text-shadow: 1px 1px 10px #00000092;">Quote</h2>
-    <h3 id="authorBox" style="font-style:bold; font-size: 2rem; position: static; width: 100%; text-align: center; color: rgb(50, 50, 50); text-shadow: 1px 1px 10px #16161692;margin-top: 20px;">Quote</h3>
+    <h3 id="authorBox" style="font-style:bold; font-size: 2.4rem; position: static; width: 100%; text-align: center; color: rgb(50, 50, 50); text-shadow: 1px 1px 10px #16161692;margin-top: 30px;">Quote</h3>
     </div>
     <script>
     let quoteBox = document.getElementById('quotebox');
@@ -37,7 +37,7 @@
         async function getQuote() {
             try {
             const res = await fetch('quotesdb.json');
-            if (!res.ok) throw new Error('The network response was not ok.');
+            if (!res.ok) throw new Error('The network response was not ok.') && console.log("Fetching quotes database has failed. Please make sure that the quotesdb.json file is accessible and present in the directory.");
             const data = await res.json();
 
             const quotes = Array.isArray(data) ? data : (Array.isArray(data.quotes) ? data.quotes : []);
