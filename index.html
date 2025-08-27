@@ -10,7 +10,8 @@
         <link href="materialize/css/materialize.css" rel="stylesheet">
         <link rel="stylesheet" href="materialize/css/materialize.css">
     </head>
-    <style>/* fallback */
+    <style>
+    /* fallback */
 @font-face {
   font-family: 'Material Icons';
   font-style: normal;
@@ -42,6 +43,7 @@
     <div class="cont">
     <h2 id="quotebox" style="font-style:italic; font-size: 5rem; position: static; width: 100%; padding: 4%; margin: auto; text-align: center; color: rgb(0, 0, 0); text-shadow: 1px 1px 10px #00000092;">Quote</h2>
     <h3 id="authorBox" style="font-style:bold; font-size: 2.4rem; position: static; width: 100%; text-align: center; color: rgb(50, 50, 50); text-shadow: 1px 1px 10px #16161692;margin-top: 30px;">Quote</h3>
+    <h3 id="dateBox" style="font-style:bold; font-size: 2.4rem; position: static; width: 100%; text-align: center; color: rgb(50, 50, 50); text-shadow: 1px 1px 10px #16161692;margin-top: 30px;">Date</h3>
     </div>
     <script>
     let quoteBox = document.getElementById('quotebox');
@@ -53,7 +55,7 @@
                 return min;
             }
             else {
-                return Math.floor(Math.random() * (max - min + 1)) + min;
+                return (Math.floor(Math.random() * (max - min + 1)) + min);
             }
 
         }
@@ -202,7 +204,9 @@
                 'to',
                 'up',
                 'as',
-                'your'
+                'your',
+                'then',
+                'we',
             ];
             const lastWordRaw = result.split(' ').pop() || '';
             const lastWord = lastWordRaw.replace(/[.?!]+$/,'').toLowerCase();
@@ -213,8 +217,6 @@
             result = result.replaceAll(/[.?!]+/g, '');
             result = result.replaceAll(/[,;:]+/g, '');
             result = result.endsWith('.') ? result : result + '.';
-            // if there is anything from the deleteArray before the end period, delete it
-
             return result;
         }
         async function randomAuthor() {
@@ -250,18 +252,20 @@
                         job = entry.job ?? entry.title ?? 'Professional';
                     }
                 }
-                quoteAuthor.style.textShadow = '1px 1px 10px #' + Math.floor(Math.random()*2000000).toString(16);
-
-                quoteAuthor.textContent = `${author}, a ${job}`;
+                quoteAuthor.textContent = `${author}, ${job}`;
             } catch (error) {
                 console.error('Error fetching author/job:', error);
                 quoteAuthor.textContent = 'Quote';
             }
         }
+        function randomDate() {
+            document.getElementById("dateBox").textContent = "From " + randomNumber(1200, 2025);
+        }
         quoteButton.addEventListener("click", () => {
             getQuote().then(() => {
                 quoteBox.textContent = garbleQuote(randomQuote);
                 randomAuthor();
+                randomDate();
             });
         });
         </script>
