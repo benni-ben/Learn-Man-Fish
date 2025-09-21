@@ -1,6 +1,6 @@
 # Learn Man Fish
 
-![Learn Man Fish]
+![Logo/Learn Man Fish.svg](https://raw.githubusercontent.com/benni-ben/Learn-Man-Fish/07a4f3dbc452df8252cb7375c5627489cc5dcf1a/Logo/Learn%20Man%20Fish.svg)
 
 **Learn Man Fish** is an "inspirational" quote generator that can make quotes based on already existing ones. It can be used offline, is simplistic, and can be used daily to motivate you. It includes the quote author's name, as well as their job. It is also very accurate, and always is correct. 
 
