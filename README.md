@@ -1,6 +1,7 @@
 # Learn Man Fish
 
-![Learn Man Fish]
+![Learn Man Fish](https://raw.githubusercontent.com/benni-ben/Learn-Man-Fish/1024698e21d42335e3df1fa8c82251aadfd91628/Logo/Learn%20Man%20Fish.svg)
+
 
 **Learn Man Fish** is an "inspirational" quote generator that can make quotes based on already existing ones. It can be used offline, is simplistic, and can be used daily to motivate you. It includes the quote author's name, as well as their job. It is also very accurate, and always is correct. 
 
@@ -8,7 +9,7 @@
 
 http://materializecss.com/
 
-https://github.com/benni-ben/Learn-Man-Fish/blob/main/SCREENSHOT1.png?raw=true
+![](https://github.com/benni-ben/Learn-Man-Fish/blob/main/SCREENSHOT1.png?raw=true)
 
 ### Also, please remember to star the repository!
 
